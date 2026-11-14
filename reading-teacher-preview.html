@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traveling With My Best Friend · 智汇学堂</title>
+<style>
+:root{--canvas:#f1eee7;--paper:#fffdf7;--shade:#eaeade;--ink:#193247;--muted:#53685e;--line:#c9cec4;--active:#286859;--mark:#ffe59c;--font:22px;--split:57}
+:root[data-theme="green"]{--canvas:#e4eee7;--paper:#f5fbf4;--shade:#dceadf}
+:root[data-theme="blue"]{--canvas:#e5edf4;--paper:#f5faff;--shade:#e3ebf1}
+:root[data-theme="white"]{--canvas:#f1f4f6;--paper:#fff;--shade:#e8eef2}
+*{box-sizing:border-box}body{margin:0;background:var(--canvas);color:var(--ink);font:15px/1.45 system-ui,"PingFang SC","Microsoft YaHei",sans-serif}
+button,select,input{font:inherit;color:inherit}button,select,input{border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:.45rem .7rem}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #c27e1e;outline-offset:2px}button:hover:enabled{border-color:var(--active)}[aria-pressed=true],.primary{background:var(--active);color:#fff;border-color:var(--active)}
+header{background:#183647;color:white;display:flex;gap:14px;align-items:center;justify-content:space-between;padding:11px max(18px,calc((100vw - 1700px)/2));flex-wrap:wrap}header strong{font-size:21px;letter-spacing:.08em}header button,header select{background:#23495a;color:white;border-color:#68818c}
+.tools,.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+main{max-width:1730px;margin:auto;padding:14px 16px 22px}h1{font:700 clamp(28px,4vw,53px)/1.06 Georgia,serif;margin:3px 0 20px}h2{font-size:19px;margin:0}h3{margin:0}
+.layout{display:grid;grid-template-columns:clamp(170px,16vw,250px) minmax(0,1fr);gap:12px}.layout.directory-collapsed{grid-template-columns:44px minmax(0,1fr)}.split{display:grid;grid-template-columns:minmax(0,var(--left,57%)) 14px minmax(0,1fr);min-width:0}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:13px;overflow:hidden;min-width:0}.panel-heading{background:var(--shade);padding:10px 15px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:6px;align-items:center}.inside{padding:15px}.divider{border:0;border-radius:0;background:transparent;padding:0;cursor:col-resize;touch-action:none;display:grid;place-items:center}.divider span{border-radius:12px;background:var(--paper);border:1px solid var(--line);padding:8px 1px;color:var(--muted);font-size:11px}
+#search{width:100%;margin-bottom:12px}#lessonList button{width:100%;text-align:left;margin-bottom:7px}.aside-note,.note{color:var(--muted);font-size:13px}
+.passage-body,.question-body{max-height:calc(100dvh - 175px);min-height:350px;overflow:auto}.passage-body{font:var(--font)/1.57 Georgia,serif}.paragraph{display:grid;grid-template-columns:2ch minmax(0,1fr);gap:10px;margin:0 0 16px}.index{color:var(--active);font:600 13px/2.7 system-ui}.paragraph p{margin:0}mark{background:var(--mark);border-radius:4px;color:inherit;box-decoration-break:clone;-webkit-box-decoration-break:clone;padding:0 .12em}
+.nav{justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:10px}.nav button{min-width:34px}.instruction{font:700 17px/1.4 Georgia,serif;color:var(--muted);margin:14px 0 10px}.bank{background:var(--shade);border-radius:8px;padding:8px 10px;display:flex;flex-wrap:wrap;gap:4px 14px;font:16px/1.45 Georgia,serif}.bank b{font:600 11px system-ui;color:var(--muted)}
+.stem{font:700 var(--font)/1.52 Georgia,serif;margin:18px 0}.blank{display:inline-block;min-width:4.6em;padding:0 .15em;color:var(--active);background:none;border:0;border-radius:0;border-bottom:2px solid var(--active);font:inherit;vertical-align:baseline}.answer{background:var(--shade);border:1px solid var(--line);border-radius:9px;padding:13px;margin-top:12px}.answer p{margin:0 0 8px}.answer p:last-child{margin:0}.paging{justify-content:space-between;margin-top:20px}.number{color:var(--active);margin-right:.25em}.vocab-list{padding-left:1.5rem;line-height:2}.section-tab{border:0;background:transparent;font-weight:750;color:var(--muted);padding-left:0}
+@media(max-width:920px){.layout{grid-template-columns:1fr}.sidebar .inside{display:flex;gap:10px;align-items:center;flex-wrap:wrap}#search{width:175px;margin:0}#lessonList button{width:auto;margin:0}.sidebar .aside-note{margin:0}.passage-body,.question-body{max-height:65vh}}
+@media(max-width:620px){main{padding:10px}.split{grid-template-columns:1fr}.divider{display:none}.passage-body,.question-body{min-height:0;max-height:50vh}.question{margin-top:9px}.inside{padding:11px}.paragraph{gap:7px}}
+.directory-rail[hidden]{display:none}
+.directory-rail{align-self:start;display:grid;justify-items:center;gap:10px;width:44px;min-height:139px;padding:11px 4px;background:var(--paper);color:var(--active);font-weight:750;border-color:var(--line);border-radius:12px}
+.directory-rail .rail-label{writing-mode:vertical-rl;letter-spacing:.12em}
+.directory-rail:hover{background:var(--shade)}
+.directory-close{padding:.2rem .5rem;line-height:1.2}
+#numbers[hidden]{display:none}
+@media(max-width:620px){.layout.directory-collapsed{grid-template-columns:1fr;gap:8px}.directory-rail{display:flex;width:auto;min-height:0;gap:7px;padding:6px 10px}.directory-rail .rail-label{writing-mode:horizontal-tb;letter-spacing:0}}
+</style>
+</head>
+<body>
+<header>
+  <strong>智汇学堂</strong>
+  <div class="tools" aria-label="教学导航">
+    <button id="directory" aria-expanded="true" aria-controls="sidebar">题库目录</button>
+    <label>护眼 <select id="theme"><option value="warm">暖米</option><option value="white">标准</option><option value="green">柔绿</option><option value="blue">雾蓝</option></select></label>
+    <label>字号 <select id="font"></select></label>
+    <button id="reset">恢复分栏</button><button id="fullscreen">全屏</button>
+  </div>
+</header>
+<main>
+<h1>Traveling With My Best Friend</h1>
+<div class="layout" id="readingLayout">
+  <aside id="sidebar" class="panel sidebar">
+    <div class="panel-heading"><h2>题库目录</h2><button class="directory-close" id="directoryClose" aria-label="收起题库目录" aria-controls="sidebar" title="收起目录">‹</button></div>
+    <div class="inside">
+      <input id="search" type="search" aria-label="搜索篇名" placeholder="搜索篇名">
+      <div id="lessonList"><button aria-current="page" aria-pressed="true">Traveling With My Best Friend</button></div>
+      <p class="aside-note" id="searchNote">示例篇目 · 1 篇</p>
+    </div>
+  </aside>
+  <button class="directory-rail" id="directoryRail" aria-label="展开题库目录" aria-expanded="false" aria-controls="sidebar" title="展开题库目录" hidden>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M9 5v14m3-10h5m-5 5h5"/></svg>
+    <span class="rail-label">题库目录</span><span aria-hidden="true">›</span>
+  </button>
+  <div class="split" id="split">
+    <section class="panel">
+      <div class="panel-heading"><h2>阅读原文</h2><span class="note">节选</span></div>
+      <div class="inside passage-body" id="passage" tabindex="0" aria-label="阅读原文"></div>
+    </section>
+    <button class="divider" id="divider" aria-label="调整分栏，使用左右方向键"><span aria-hidden="true">Ⅱ</span></button>
+    <section class="panel question">
+      <div class="panel-heading"><h2>逐题精讲</h2><span id="progress" class="note"></span></div>
+      <div class="inside question-body">
+        <div class="row nav"><div class="row"><button id="words" aria-pressed="false">单词</button><button id="exercise" aria-pressed="true">Ⅰ</button></div><nav class="row" id="numbers" aria-label="题号"></nav></div>
+        <div id="question"></div>
+      </div>
+    </section>
+  </div>
+</div>
+</main>
+<script>
+const passage=[
+  'When I met Liebchen at the local animal shelter, I fell in love with him at first sight. He is an outgoing and energetic orange cat.',
+  'After I brought him home, Liebchen started meowing at the door. He was trying to tell me that he wanted to go outside and explore. Liebchen went on his first hike when he was just ten weeks old. Now he goes on adventures everywhere with me.',
+  'When we go out, I usually make him wear goggles. This helps protect him from sunburn and snow blindness (雪盲症). On cold winter days, I also put a jacket on him if he needs it. I do a lot of things with Liebchen. Out of all these things, he likes hiking the most. He loves exploring forests, too.'
+];
+const bank=[['shelter','收容所'],['explore','探索'],['protect','保护'],['excited','兴奋的'],['adventurous','爱冒险的'],['energetic','精力充沛的']];
+const questions=[
+  ['The dog was so ',' after playing fetch that it ran around the yard for hours.','energetic','so 后接形容词。跑了几个小时，说明它精力充沛。',0,'energetic'],
+  ['We visited the animal ',' to adopt a puppy last weekend.','shelter','animal shelter 意为「动物收容所」，与领养小狗的语境相符。',0,'at the local animal shelter'],
+  ['Scientists continue to ',' the deep ocean to discover new species.','explore','continue to 后接动词原形。explore the deep ocean 意为「探索深海」。',1,'go outside and explore'],
+  ['Wearing sunscreen helps ',' your skin from harmful UV rays.','protect','protect A from B 表示「保护 A 免受 B 的伤害」。',2,'protect him from sunburn'],
+  ['The children were ',' when they saw the amusement park for the first time.','excited','were 后接形容词。excited 描述孩子们看到游乐园时的心情。']
+];
+const $=id=>document.getElementById(id);
+let current=1, view='exercise', revealed=false, expanded=false, located=false, ratio=57;
+const covered=new Set();
+function renderPassage(scroll){
+  const [,,,, paragraph, phrase]=questions[current];
+  $('passage').innerHTML=passage.map((line,i)=>{
+    const content=located&&i===paragraph?line.replace(phrase,'<mark>'+phrase+'</mark>'):line;
+    return '<div class="paragraph"><span class="index">'+(i+1)+'</span><p>'+content+'</p></div>';
+  }).join('');
+  if(scroll)$('passage').querySelector('mark')?.scrollIntoView({block:'nearest'});
+}
+function renderQuestion(focus){
+  const [before,after,answer,explanation,paragraph]=questions[current];
+  $('words').setAttribute('aria-pressed',view==='words');
+  $('exercise').setAttribute('aria-pressed',view==='exercise');
+  $('progress').textContent='已讲 '+covered.size+' / '+questions.length+' 题';
+  $('numbers').hidden=view==='words';
+  $('numbers').innerHTML=view==='words'?'':questions.map((_,i)=>`<button data-index="${i}" aria-pressed="${i===current}" aria-label="第 ${i+1} 题">${i+1}</button>`).join('');
+  if(view==='words'){
+    $('question').innerHTML='<ul class="vocab-list">'+bank.map(([word,meaning])=>'<li><strong>'+word+'</strong>　'+meaning+'</li>').join('')+'</ul>';
+    return;
+  }
+  $('question').innerHTML=`
+    <p class="instruction">I. Complete each sentence with one given word from the box. Each word can be used only once.</p>
+    <div class="bank" aria-label="备选词">${bank.map(([word],i)=>'<span><b>'+String.fromCharCode(65+i)+'.</b> '+word+'</span>').join('')}</div>
+    <p class="stem"><span class="number">${current+1}.</span> ${before}<button class="blank" id="blank" aria-label="${revealed?'收起填空答案':'揭示填空答案'}" aria-pressed="${revealed}">${revealed?answer:'&nbsp;'}</button>${after}</p>
+    <div class="row">
+      <button id="answer" class="primary" aria-expanded="${expanded}">${expanded?'收起答案与解析':'答案与解析'}</button>
+      <button id="locate" aria-pressed="${located}" ${paragraph===undefined?'disabled':''}>${located?'取消高亮':'定位原文'}</button>
+    </div>
+    ${paragraph===undefined?'<p class="note">本题对应词汇未出现在当前原文节选里。</p>':''}
+    ${expanded?`<div class="answer"><p><strong>答案</strong>　<em>${answer}</em></p><p><strong>解析</strong>　${explanation}</p></div>`:''}
+    <div class="row paging"><button id="prev" ${current===0?'disabled':''}>‹ 上一题</button><button id="next" ${current===questions.length-1?'disabled':''}>下一题 ›</button></div>`;
+  if(focus)document.querySelector(focus)?.focus({preventScroll:true});
+}
+function selectQuestion(index,focus){
+  if(index<0||index>=questions.length)return;
+  current=index;revealed=false;expanded=false;located=questions[index][4]!==undefined;
+  renderPassage(true);renderQuestion(focus);
+}
+$('numbers').onclick=event=>{
+  const button=event.target.closest('[data-index]');
+  if(button)selectQuestion(Number(button.dataset.index),'[data-index="'+button.dataset.index+'"]');
+};
+$('question').onclick=event=>{
+  switch(event.target.closest('button')?.id){
+    case 'blank':revealed=!revealed;if(revealed)covered.add(current);renderQuestion('#blank');break;
+    case 'answer':expanded=!expanded;if(expanded)covered.add(current);renderQuestion('#answer');break;
+    case 'locate':located=!located;renderPassage(located);renderQuestion('#locate');break;
+    case 'prev':selectQuestion(current-1,'[data-index="'+(current-1)+'"]');break;
+    case 'next':selectQuestion(current+1,'[data-index="'+(current+1)+'"]');break;
+  }
+};
+$('exercise').onclick=()=>{view='exercise';renderQuestion()};
+$('words').onclick=()=>{view='words';renderQuestion()};
+function setDirectory(open,moveFocus){
+  $('sidebar').hidden=!open;
+  $('directoryRail').hidden=open;
+  $('readingLayout').classList.toggle('directory-collapsed',!open);
+  $('directory').setAttribute('aria-expanded',String(open));
+  if(moveFocus)$(open?'directoryClose':'directoryRail').focus({preventScroll:true});
+}
+$('directory').onclick=()=>setDirectory($('sidebar').hidden,false);
+$('directoryRail').onclick=()=>setDirectory(true,true);
+$('directoryClose').onclick=()=>setDirectory(false,true);
+$('search').oninput=()=>{
+  const found='traveling with my best friend'.includes($('search').value.trim().toLowerCase());
+  $('lessonList').hidden=!found;
+  $('searchNote').textContent=found?'示例篇目 · 1 篇':'没有匹配篇目';
+};
+$('lessonList').onclick=()=>{view='exercise';selectQuestion(1,'[data-index="1"]')};
+$('theme').onchange=()=>{document.documentElement.dataset.theme=$('theme').value};
+for(let size=16;size<=36;size++)$('font').add(new Option(size+' px',size,size===22,size===22));
+$('font').onchange=()=>document.documentElement.style.setProperty('--font',$('font').value+'px');
+function resize(value){
+  ratio=Math.min(68,Math.max(35,value));
+  $('split').style.setProperty('--left','calc((100% - 14px) * '+(ratio/100)+')');
+}
+$('reset').onclick=()=>resize(57);
+const divider=$('divider');
+divider.onpointerdown=event=>divider.setPointerCapture(event.pointerId);
+divider.onpointermove=event=>{
+  if(!divider.hasPointerCapture(event.pointerId))return;
+  const bounds=$('split').getBoundingClientRect();
+  resize((event.clientX-bounds.left-7)/(bounds.width-14)*100);
+};
+divider.ondblclick=()=>resize(57);
+divider.onkeydown=event=>{
+  if(event.key==='ArrowLeft'||event.key==='ArrowRight'){
+    event.preventDefault();resize(ratio+(event.key==='ArrowLeft'?-2:2));
+  }
+};
+$('fullscreen').onclick=async()=>{
+  try{
+    if(document.fullscreenElement)await document.exitFullscreen();
+    else await document.documentElement.requestFullscreen();
+  }catch{
+    $('fullscreen').textContent='当前环境不支持全屏';
+  }
+};
+document.addEventListener('fullscreenchange',()=>$('fullscreen').textContent=document.fullscreenElement?'退出全屏':'全屏');
+resize(57);renderPassage(false);renderQuestion();
+</script>
+</body>
+</html>
