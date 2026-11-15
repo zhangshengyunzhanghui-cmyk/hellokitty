@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>只看题目 · 智汇学堂</title>
+<style>
+:root {
+  color-scheme: light;
+  --page:#eef2ed; --paper:#fffdf7; --white:#fff; --ink:#172f30;
+  --muted:#516762; --line:#d6e1d8; --accent:#245e50; --soft:#e6efe7;
+  --scale:1; font-family:"Inter","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);background:var(--page)}
+button,input{font:inherit}
+button{cursor:pointer;color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #aa791d;outline-offset:3px}
+button:disabled{opacity:.4;cursor:default}
+[hidden]{display:none!important}
+.top{background:#fbfcf9;border-bottom:1px solid var(--line)}
+.toolbar,.layout{width:min(100% - 56px,1392px);margin:auto}
+.toolbar{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand,.tools,.zoom{display:flex;align-items:center;gap:12px}
+.mark{display:grid;place-items:center;background:var(--accent);color:white;border-radius:11px;width:38px;height:38px;font-size:18px;font-weight:700}
+h1,h2,p{margin:0}
+h1{font-size:22px;line-height:1.25}
+.zoom{position:relative;border:1px solid var(--line);background:var(--white);padding:6px 10px;border-radius:10px;font-size:13px}
+.zoom input{width:clamp(72px,10vw,135px);accent-color:var(--accent);margin:0}
+.zoom output{min-width:3.1em;text-align:right;font-variant-numeric:tabular-nums}
+.btn{min-height:40px;border:1px solid var(--line);border-radius:9px;padding:8px 12px;background:var(--white);font-size:13px;font-weight:650}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.layout{display:grid;grid-template-columns:234px minmax(0,1fr);gap:24px;align-items:start;padding-block:28px}
+.nav,.stage{border:1px solid var(--line);border-radius:20px;background:var(--white);box-shadow:0 7px 24px #1c442a0a}
+.nav{padding:18px}
+.nav h2{font-size:17px}
+.field-label{font-size:12px;font-weight:700;color:var(--muted);margin:19px 0 8px}
+.choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.choices button,.numbers button{min-height:40px;border:1px solid var(--line);background:#f8faf7;border-radius:8px;padding:4px;font-size:13px}
+.choices button[aria-pressed=true],.numbers button[aria-current=true]{background:var(--accent);border-color:var(--accent);color:white;font-weight:700}
+.numbers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.stage{overflow:hidden}
+.stage-head,.stage-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 24px}
+.stage-head{border-bottom:1px solid var(--line)}
+.location{font-size:13px;color:var(--accent);font-weight:700}
+.stage-count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.paper{background:var(--paper);padding:clamp(22px,4vw,54px);min-height:300px}
+.instructions{font-size:calc(17px * var(--scale));font-weight:750;color:var(--muted);line-height:1.5}
+.prompt{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;margin-top:24px}
+.badge{align-self:start;background:var(--soft);color:var(--accent);padding:5px 9px;border-radius:7px;font-size:clamp(13px,calc(15px * var(--scale)),20px);font-weight:750}
+.question,.response{font-family:"Georgia","Noto Serif CJK SC",serif;font-size:calc(25px * var(--scale));line-height:1.55;overflow-wrap:anywhere}
+.question{font-weight:700}
+.question small{font-family:system-ui,sans-serif;color:var(--muted);font-size:.67em;font-weight:650}
+.response{margin-top:20px}
+.blank{display:inline-block;width:3.6em;border-bottom:2px solid var(--accent);margin-inline:.13em}
+.stage-foot{border-top:1px solid var(--line)}
+.steps{display:flex;gap:8px}
+.primary{background:var(--accent);color:white;border-color:var(--accent)}
+.primary:hover:not(:disabled){background:#194b40;color:white}
+.empty{color:var(--muted);font-size:calc(16px * var(--scale));line-height:1.6}
+.annotation{margin:14px 24px;padding:12px;border-radius:10px;background:var(--soft)}
+.annotation label{display:block;margin-bottom:7px;font-size:13px;font-weight:700}
+.annotation textarea{box-sizing:border-box;width:100%;min-height:85px;resize:vertical;border:1px solid var(--line);border-radius:8px;padding:10px;font:inherit}
+@media(max-width:780px){
+  .toolbar,.layout{width:calc(100% - 28px)}
+  .toolbar{padding-block:12px;min-height:0;flex-wrap:wrap;gap:10px}
+  .tools{max-width:100%;flex-wrap:wrap;gap:6px}
+  .layout{grid-template-columns:minmax(0,1fr);gap:13px;padding-block:14px}
+  .nav{padding:13px}
+  .nav-body{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .field-label{margin-top:10px}
+  .choices,.numbers{gap:3px}
+  .stage-head,.stage-foot{padding:10px 13px}
+  .question,.response{font-size:calc(20px * var(--scale))}
+}
+@media(max-width:370px){.nav-body{grid-template-columns:1fr}.btn{padding-inline:8px}.paper{padding:16px}.prompt{gap:8px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="toolbar">
+    <div class="brand"><span class="mark" aria-hidden="true">智</span><h1>只看题目</h1></div>
+    <div class="tools">
+      <label class="zoom" for="zoom">字号 <input id="zoom" type="range" min="80" max="160" step="5" value="100"><output id="zoom-value" for="zoom">100%</output></label>
+      <button class="btn" type="button" id="fullscreen">全屏</button>
+    </div>
+  </div>
+</header>
+<main class="layout">
+  <aside class="nav" aria-labelledby="nav-heading">
+    <h2 id="nav-heading">逐题精讲</h2>
+    <div class="nav-body">
+      <div><p class="field-label" id="sections-label">题型</p><div class="choices" id="sections" role="group" aria-labelledby="sections-label">
+        <button type="button" data-section="单词" aria-pressed="false">单词</button><button type="button" data-section="I" aria-pressed="false">I</button><button type="button" data-section="II" aria-pressed="false">II</button><button type="button" data-section="III" aria-pressed="true">III</button>
+      </div></div>
+      <div><p class="field-label" id="numbers-label">题号</p><div class="numbers" id="numbers" role="group" aria-labelledby="numbers-label"></div></div>
+    </div>
+  </aside>
+  <section class="stage" aria-label="题目内容">
+    <header class="stage-head"><p class="location" id="location">III · 句型转换</p><p class="stage-count" id="count" aria-live="polite">第 1 / 5 题</p></header>
+    <div class="paper">
+      <div id="sample">
+        <h2 class="instructions" lang="en">III. Complete the following sentences as required.</h2>
+        <div class="prompt"><span class="badge">1</span><div>
+          <p class="question"><span lang="en">He was trying to tell me that he wanted to go outside and explore.</span> <small>（改为直接引语）</small></p>
+          <p class="response" lang="en">He was trying to tell me, “<span class="blank" aria-label="第一空"></span> <span class="blank" aria-label="第二空"></span> to go outside and explore.”</p>
+        </div></div>
+      </div>
+      <p class="empty" id="empty" hidden>预览仅收录截图中的原题。</p>
+    </div>
+    <div class="annotation" id="annotation" hidden><label for="note">本题备注</label><textarea id="note" placeholder="输入课堂补充"></textarea></div>
+    <footer class="stage-foot">
+      <button class="btn" id="note-toggle" type="button" aria-expanded="false" aria-controls="annotation">添加备注</button>
+      <div class="steps"><button class="btn" id="prev" type="button">← 上一题</button><button class="btn primary" id="next" type="button">下一题 →</button></div>
+    </footer>
+  </section>
+</main>
+<script>
+const get = id => document.getElementById(id);
+let section = 'III';
+let number = 1;
+const sectionButtons = [...get('sections').querySelectorAll('button')];
+const numberButtons = Array.from({ length: 5 }, (_, index) => {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.textContent = index + 1;
+  button.onclick = () => { number = index + 1; render(); };
+  get('numbers').append(button);
+  return button;
+});
+function render() {
+  const questionCount = section === 'III' ? numberButtons.length : 0;
+  const hasSample = section === 'III' && number === 1;
+  sectionButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.section === section)));
+  numberButtons.forEach((button, index) => {
+    button.hidden = !questionCount;
+    button.setAttribute('aria-current', String(index + 1 === number && questionCount > 0));
+  });
+  get('location').textContent = section === 'III' ? 'III · 句型转换' : section;
+  get('count').textContent = questionCount ? '第 ' + number + ' / ' + questionCount + ' 题' : '暂无预览题目';
+  get('sample').hidden = !hasSample;
+  get('empty').hidden = hasSample;
+  get('prev').disabled = !questionCount || number === 1;
+  get('next').disabled = !questionCount || number === questionCount;
+  get('note-toggle').disabled = !hasSample;
+  if (!hasSample) {
+    get('annotation').hidden = true;
+    get('note-toggle').setAttribute('aria-expanded', 'false');
+    get('note-toggle').textContent = '添加备注';
+  }
+}
+sectionButtons.forEach(button => button.onclick = () => {
+  section = button.dataset.section;
+  number = 1;
+  render();
+});
+get('prev').onclick = () => { number -= 1; render(); };
+get('next').onclick = () => { number += 1; render(); };
+get('zoom').oninput = event => {
+  const value = event.target.value;
+  document.documentElement.style.setProperty('--scale', value / 100);
+  get('zoom-value').value = value + '%';
+};
+get('note-toggle').onclick = () => {
+  const opening = get('annotation').hidden;
+  get('annotation').hidden = !opening;
+  get('note-toggle').setAttribute('aria-expanded', String(opening));
+  get('note-toggle').textContent = opening ? '收起备注' : get('note').value.trim() ? '查看备注' : '添加备注';
+  if (opening) get('note').focus();
+};
+const fullscreen = get('fullscreen');
+fullscreen.hidden = !document.fullscreenEnabled;
+fullscreen.onclick = async () => {
+  try {
+    if (document.fullscreenElement) await document.exitFullscreen();
+    else await document.documentElement.requestFullscreen();
+  } catch {
+    fullscreen.textContent = '全屏不可用';
+  }
+};
+document.addEventListener('fullscreenchange', () => {
+  fullscreen.textContent = document.fullscreenElement ? '退出全屏' : '全屏';
+});
+render();
+</script>
+</body>
+</html>
