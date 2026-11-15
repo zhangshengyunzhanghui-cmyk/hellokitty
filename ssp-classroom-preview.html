@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>上海 SSP 初中课堂预览</title><style>body{margin:0}</style></head><body>
+<style>/* Load after the existing SSP stylesheets. All selectors are scoped to SSP. */
+@media screen {
+  #ssp-preview {
+    --ssp-ink: #202f2b;
+    --ssp-muted: #52625b;
+    --ssp-line: #d7e1d8;
+    --ssp-surface: #fffefb;
+    --ssp-canvas: #f1f4ef;
+    --ssp-green: #28574a;
+    --ssp-tint: #e7f0e9;
+    background: var(--ssp-canvas);
+    color: var(--ssp-ink);
+    font-family: "Inter", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  }
+  #ssp-preview .reader-header {
+    gap: 12px 18px;
+    padding: 10px clamp(14px, 2.4vw, 34px);
+    background: var(--ssp-surface);
+    color: var(--ssp-ink);
+    border-color: var(--ssp-line);
+  }
+  #ssp-preview .reader-header :is(a,button) {
+    background: var(--ssp-surface);
+    color: var(--ssp-green);
+    border-color: var(--ssp-line);
+    min-height: 38px;
+  }
+  #ssp-preview .reader-header nav {
+    background: var(--ssp-tint);
+    padding: 3px;
+    border-radius: 999px;
+  }
+  #ssp-preview .reader-header nav a { border: 0; border-radius: 999px; }
+  #ssp-preview .reader-header nav a[aria-current=page] {
+    background: var(--ssp-green);
+    color: #fff;
+  }
+  #ssp-preview .reader-layout {
+    gap: clamp(12px, 1.5vw, 24px);
+    padding: 18px clamp(12px, 2vw, 32px) 82px;
+  }
+  #ssp-preview .reader-layout > main {
+    width: 100%;
+    max-width: none;
+  }
+  #ssp-preview :is(#readerContents, #readingSplit > .reading-display-pane) {
+    border: 1px solid var(--ssp-line);
+    border-radius: 16px;
+  }
+  #ssp-preview #readerContents { background: var(--ssp-surface); }
+  #ssp-preview #readerContents summary { color: var(--ssp-green); }
+  #ssp-preview #chapterTitle {
+    margin: 0 0 16px;
+    padding: 0;
+    color: var(--ssp-ink);
+    font: 700 clamp(28px,3.1vw,52px)/1.13 Georgia,"Songti SC",serif;
+    text-wrap: pretty;
+  }
+  #ssp-preview #readingSplit > .reading-display-pane {
+    box-sizing: border-box;
+    padding: clamp(12px,1.65vw,28px);
+  }
+  #ssp-preview #readingText { text-align: start; line-height: 1.65; }
+  #ssp-preview #readingText p { margin-block: 0 1em; }
+  #ssp-preview #readingText p:last-child { margin-bottom: 0; }
+  #ssp-preview #question-focus-shared-view {
+    color-scheme: light;
+    --page: var(--ssp-surface);
+    --paper: var(--ssp-surface);
+    --white: var(--ssp-surface);
+    --ink: var(--ssp-ink);
+    --muted: var(--ssp-muted);
+    --line: var(--ssp-line);
+    --accent: var(--ssp-green);
+    --soft: var(--ssp-tint);
+    --desk-bar: var(--ssp-surface);
+    --desk-bar-text: var(--ssp-ink);
+    border: 1px solid var(--ssp-line);
+    border-radius: 16px;
+  }
+  #ssp-preview #question-focus-shared-view .top { border-bottom: 1px solid var(--ssp-line); }
+  #ssp-preview #question-focus-shared-view .toolbar {
+    display: grid;
+    width: auto;
+    min-height: 0;
+    gap: 10px;
+    padding: 14px;
+  }
+  #ssp-preview #question-focus-shared-view .mark { display: none; }
+  #ssp-preview #question-focus-shared-view #view-title {
+    color: var(--ssp-ink);
+    font: 750 19px/1.3 system-ui,sans-serif;
+  }
+  #ssp-preview #question-focus-shared-view .tools { gap: 8px; }
+  #ssp-preview #question-focus-shared-view .tools > * { max-width: 100%; }
+  #ssp-preview #question-focus-shared-view .zoom input { width: clamp(58px,6vw,116px); }
+  #ssp-preview #question-focus-shared-view .capsule { background: var(--ssp-tint); }
+  #ssp-preview #question-focus-shared-view .capsule button[aria-pressed=true] {
+    background: var(--ssp-green);
+    color: #fff;
+  }
+  #ssp-preview #question-focus-shared-view .layout { width: 100%; padding-block: 0; }
+  #ssp-preview #question-focus-shared-view :is(.stage,.nav) {
+    border: 0;
+    border-radius: 0 !important;
+    box-shadow: none;
+  }
+  #ssp-preview #question-focus-shared-view .nav { border-top: 1px solid var(--ssp-line); }
+  #ssp-preview #question-focus-shared-view .layout[data-nav=top] .nav {
+    border-top: 0;
+    border-bottom: 1px solid var(--ssp-line);
+  }
+  #ssp-preview #question-focus-shared-view .paper { min-height: 0; }
+  #ssp-preview #question-focus-shared-view .stage-foot:has(.control-group[hidden]):has(.steps[hidden]) { display: none; }
+  #ssp-preview #sspQuestionsScreen[open] { background: var(--ssp-canvas); }
+  /* Override the saved drag position only on this teaching page. */
+  #ssp-preview #petalNavigation,
+  #ssp-preview #petalNavigation.petal-free {
+    inset: auto 12px 12px auto !important;
+    transform: none !important;
+    margin: 0;
+  }
+  #ssp-preview :is(button,a,input,select):focus-visible {
+    outline: 2px solid #226c57;
+    outline-offset: 3px;
+  }
+  @media (max-width:760px) {
+    #ssp-preview .reader-layout { padding-inline: 12px; }
+    #ssp-preview #readingSplit > .reading-display-pane { position: static; }
+  }
+}
+</style>
+<style>
+#ssp-preview {min-height:610px;color-scheme:light}
+#ssp-preview * {box-sizing:border-box}
+#ssp-preview [hidden] {display:none!important}
+#ssp-preview .reader-header {display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--ssp-line);flex-wrap:wrap}
+#ssp-preview .reader-header strong {font-size:17px}
+#ssp-preview .reader-header button, #ssp-preview #palette {font:inherit;border:1px solid var(--ssp-line);padding:6px 10px;border-radius:9px;cursor:pointer}
+#ssp-preview .reader-layout {display:grid;grid-template-columns:minmax(125px, .68fr) minmax(0,3.3fr);align-items:start;padding-bottom:18px}
+#ssp-preview .reader-layout:has(details:not([open])) {grid-template-columns:max-content minmax(0,1fr)}
+#ssp-preview #readerContents {padding:10px}
+#ssp-preview #readerContents summary {cursor:pointer;font-weight:700;padding:3px 2px}
+#ssp-preview #readerContents p {margin:12px 0 0;padding:10px;background:var(--ssp-tint);border-radius:8px;font-size:13px;font-weight:650}
+#ssp-preview #readingSplit {display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:14px;align-items:start}
+#ssp-preview.questions-only #readingSplit {grid-template-columns:minmax(0,1fr)}
+#ssp-preview.questions-only .reading-display-pane {display:none}
+#ssp-preview #readingSplit > .reading-display-pane {background:var(--ssp-surface);color:var(--ssp-ink)}
+#ssp-preview #readingSplit > .reading-display-pane[data-palette=eye] {background:#eaf2e6}
+#ssp-preview #readingSplit > .reading-display-pane[data-palette=board] {background:#223b34;color:#f2f7ec}
+#ssp-preview .reading-header {display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+#ssp-preview .reading-header h2 {margin:0;font:700 16px/1.25 system-ui}
+#ssp-preview #palette {background:var(--ssp-surface);color:var(--ssp-ink);font-size:13px}
+#ssp-preview #readingText {font-family:Georgia,serif;font-size:clamp(17px,2.2vw,21px)}
+#ssp-preview .word-list {margin:0;padding-left:26px;color:var(--ssp-green)}
+#ssp-preview .word-list li {padding:8px 0;border-bottom:1px solid var(--ssp-line)}
+#ssp-preview .word-list li:last-child {border-bottom:0}
+#ssp-preview .word-list span {display:block;color:var(--ssp-muted);font-size:14px;margin-top:2px}
+#ssp-preview #question-focus-shared-view .stage-foot:has([hidden]):not(:has(.control-group:not([hidden]),.steps:not([hidden])) {display:none}
+#ssp-preview #question-focus-shared-view:fullscreen {background:var(--ssp-surface);overflow:auto}
+@media(max-width:750px) {#ssp-preview .reader-layout, #ssp-preview .reader-layout:has(details:not([open])), #ssp-preview #readingSplit {grid-template-columns:minmax(0,1fr)}}
+</style>
+<div id="ssp-preview" class="ssp-reading-page">
+<header class="reader-header"><strong>上海 SSP 初中 · 基础</strong><button type="button" id="preview-tools" aria-expanded="false">课堂工具</button></header>
+<div class="reader-layout">
+<details id="readerContents" open><summary>题库目录</summary><p aria-current="page">What an Interesting Meal!</p></details>
+<main><h1 id="chapterTitle" lang="en">What an Interesting Meal!</h1>
+<div id="readingSplit">
+<section class="reading-display-pane" data-palette="eye">
+<header class="reading-header"><h2>阅读原文</h2><select id="palette" aria-label="原文配色"><option value="eye">柔绿护眼</option><option value="paper">暖白纸面</option><option value="board">深色黑板</option></select></header>
+<div id="readingText" lang="en"><p>My name is Laleh. I have a daughter named Charlie and a son named Jacob. One day in 2015, I turned my son’s pancake into a “lion” for a bit of fun. He loved it and asked if I could make him a character from a movie, book or toy.</p><p>Since then, I’ve been turning our meals into art pieces every week. These meals each take 25 to 40 minutes to make. I only use fresh and healthy foods to create them. I color some parts of the meals, but only with natural ingredients, so everything is safe to eat.</p><p>After watching the movie Turning Red (《青春变形记》), I fell in love with the main character, Meilin. I decided to make her the star of one of my meals. Firstly, I made her face out of mashed potatoes (土豆泥). Then, I colored her mouth with some watermelon juice. After that, I made her teeth from a boiled egg. Her hair was made out of eggplant. And I turned half an apple and some flatbread into her shirt. Lastly, I cut out her hairpin from a piece of cucumber and added other decorations.</p><p>My little ones love these interesting meals. Charlie always gives me suggestions on how I can make the characters even more vivid. Jacob likes to discuss with me what ingredients I should use. I really enjoy making these pieces with their help!</p></div>
+</section>
+<style>
+@scope (#question-focus-shared-view) {
+
+:scope {
+  color-scheme: light dark;
+  --page:light-dark(#eef2ed, #152222); --paper:light-dark(#fffdf7, #202b29); --white:light-dark(#fff, #1c2928); --ink:light-dark(#172f30, #e1eee9);
+  --muted:light-dark(#516762, #b1c6bc); --line:light-dark(#d6e1d8, #405750); --accent:light-dark(#245e50, #337662); --soft:light-dark(#e6efe7, #29443a);
+  --scale:1; font-family:"Inter","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+:scope{margin:0;color:var(--ink);background:var(--page)}
+button,input{font:inherit}
+button{cursor:pointer;color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #aa791d;outline-offset:3px}
+button:disabled{opacity:.4;cursor:default}
+[hidden]{display:none!important}
+.top{background:light-dark(#fbfcf9, #1c2928);border-bottom:1px solid var(--line)}
+.toolbar,.layout{width:min(100% - 56px,1392px);margin:auto}
+.toolbar{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand,.tools,.zoom{display:flex;align-items:center;gap:12px}
+.mark{display:grid;place-items:center;background:var(--accent);color:white;border-radius:11px;width:38px;height:38px;font-size:18px;font-weight:700}
+h1,h2,p{margin:0}
+h1{font-size:22px;line-height:1.25}
+.zoom{position:relative;border:1px solid var(--line);background:var(--white);padding:6px 10px;border-radius:10px;font-size:13px}
+.zoom input{width:clamp(72px,10vw,135px);accent-color:var(--accent);margin:0}
+.zoom output{min-width:3.1em;text-align:right;font-variant-numeric:tabular-nums}
+.btn{min-height:40px;border:1px solid var(--line);border-radius:9px;padding:8px 12px;background:var(--white);font-size:13px;font-weight:650}
+.btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.layout{display:grid;grid-template-columns:234px minmax(0,1fr);gap:24px;align-items:start;padding-block:28px}
+.nav,.stage{border:1px solid var(--line);border-radius:20px;background:var(--white);box-shadow:0 7px 24px #1c442a0a}
+.nav{padding:18px}
+.nav h2{font-size:17px}
+.field-label{font-size:12px;font-weight:700;color:var(--muted);margin:19px 0 8px}
+.choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.choices button,.numbers button{min-height:40px;border:1px solid var(--line);background:light-dark(#f8faf7, #253432);border-radius:8px;padding:4px;font-size:13px}
+.choices button[aria-pressed=true],.numbers button[aria-current=true]{background:var(--accent);border-color:var(--accent);color:white;font-weight:700}
+.numbers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.stage{overflow:hidden}
+.stage-head,.stage-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 24px}
+.stage-head{border-bottom:1px solid var(--line)}
+.location{font-size:13px;color:var(--accent);font-weight:700}
+.stage-count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.paper{background:var(--paper);padding:clamp(22px,4vw,54px);min-height:300px}
+.instructions{font-size:calc(17px * var(--scale));font-weight:750;color:var(--muted);line-height:1.5}
+.prompt{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;margin-top:24px}
+.badge{align-self:start;background:var(--soft);color:var(--accent);padding:5px 9px;border-radius:7px;font-size:clamp(13px,calc(15px * var(--scale)),20px);font-weight:750}
+.question,.response{font-family:"Georgia","Noto Serif CJK SC",serif;font-size:calc(25px * var(--scale));line-height:1.55;overflow-wrap:anywhere}
+.question{font-weight:700}
+.question small{font-family:system-ui,sans-serif;color:var(--muted);font-size:.67em;font-weight:650}
+.response{margin-top:20px}
+.blank{display:inline-block;width:3.6em;border-bottom:2px solid var(--accent);margin-inline:.13em}
+.stage-foot{border-top:1px solid var(--line)}
+.steps{display:flex;gap:8px}
+.primary{background:var(--accent);color:white;border-color:var(--accent)}
+.primary:hover:not(:disabled){background:#194b40;color:white}
+.empty{color:var(--muted);font-size:calc(16px * var(--scale));line-height:1.6}
+@media(max-width:780px){
+  .toolbar,.layout{width:calc(100% - 28px)}
+  .toolbar{padding-block:12px;min-height:0;flex-wrap:wrap;gap:10px}
+  .tools{max-width:100%;flex-wrap:wrap;gap:6px}
+  .layout{grid-template-columns:minmax(0,1fr);gap:13px;padding-block:14px}
+  .nav{padding:13px}
+  .nav-body{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .field-label{margin-top:10px}
+  .choices,.numbers{gap:3px}
+  .stage-head,.stage-foot{padding:10px 13px}
+  .question,.response{font-size:calc(20px * var(--scale))}
+}
+@media(max-width:370px){.nav-body{grid-template-columns:1fr}.btn{padding-inline:8px}.paper{padding:16px}.prompt{gap:8px}}
+
+}
+
+@scope (#question-focus-shared-view) {
+  :scope {
+    --page: light-dark(#dae5e5, #162326);
+    --paper: light-dark(#fdf9ed, #242d2e);
+    --line: light-dark(#cfdbd8, #435959);
+    --accent: light-dark(#225957, #388480);
+    --soft: light-dark(#e2eeea, #284440);
+    --desk-bar: light-dark(#163b40, #112d33);
+    --desk-bar-text: #f5faf8;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .top { background: var(--desk-bar); color: var(--desk-bar-text); border: 0; }
+  .mark { background: #cee7db; color: #173b3b; }
+  .toolbar { min-height: 66px; }
+  .zoom, .tools .btn { color: var(--ink); }
+  .layout { display: flex; flex-direction: column; gap: 0; padding-block: 20px; }
+  .stage, .nav { width: 100%; }
+  .stage { border-radius: 16px 16px 0 0; }
+  .stage-head { background: var(--soft); }
+  .paper { min-height: 244px; padding: clamp(18px, 4vw, 40px); }
+  .paper #sample { max-width: 70ch; margin-inline: auto; }
+  .question { font-weight: 600; }
+  .response { padding-top: 14px; border-top: 1px solid var(--line); }
+  .nav { border-radius: 0 0 16px 16px; border-top: 0; padding: 12px 18px; display: flex; align-items: center; gap: 20px; }
+  .nav h2 { white-space: nowrap; font-size: 14px; }
+  .nav-body { display: flex; flex: 1; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between; }
+  .nav-body > div { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .field-label { margin: 0; }
+  .choices button, .numbers button { min-width: 34px; }
+
+  @media (max-width: 650px) {
+    .nav { display: block; }
+    .nav-body { margin-top: 6px; }
+  }
+}
+
+@scope (#question-focus-shared-view) {
+  :scope:fullscreen { overflow:auto; border-radius:0; }
+  .layout[data-nav="top"] .nav { border:1px solid var(--line); border-bottom:0; border-radius:16px 16px 0 0; }
+  .layout[data-nav="top"] .stage { border-radius:0 0 16px 16px; }
+  .control-group { display:flex; align-items:center; gap:8px; font-size:13px; }
+  .capsule { border:1px solid var(--line); background:var(--white); color:var(--ink); padding:4px; border-radius:999px; display:inline-flex; gap:3px; align-items:center; }
+  .capsule button { border:0; border-radius:999px; background:transparent; min-height:32px; padding:4px 11px; font-weight:650; font-size:13px; white-space:nowrap; }
+  .capsule button[aria-pressed=true] { color:white; background:var(--accent); }
+  .zoom { border-radius:999px; min-height:42px; }
+  .paper .question-list { max-width:76ch; margin-inline:auto; }
+  .paper:has(.prompt[aria-current=true]) { padding-block:26px; }
+  .prompt:not([hidden]) + .prompt:not([hidden]) { border-top:1px solid var(--line); padding-top:22px; }
+  .prompt[aria-current=true] .badge { color:white; background:var(--accent); }
+  .badge { white-space:nowrap; }
+  .stage-foot { flex-wrap:wrap; }
+  .stage-foot .steps { margin-left:auto; }
+  @media(max-width:650px) {
+    .toolbar { padding-block:12px; }
+    .stage-foot .steps { margin-left:0; }
+  }
+}
+
+@scope (#question-focus-shared-view) {
+  .brand { flex:0 0 auto; }
+  .brand h1 { color:var(--desk-bar-text); font-size:22px; font-weight:750; }
+  .toolbar { flex-wrap:wrap; padding-block:12px; }
+  .tools { flex-wrap:wrap; }
+  #page-view button { color:var(--ink); }
+  #page-view button[aria-pressed=true] { background:light-dark(#225957,#286361); color:#fff; }
+  #page-view button[data-value="questions"] { font-weight:750; }
+  .explanation { margin-top:16px; padding:12px 16px; border-radius:10px; background:var(--soft); color:var(--ink); font-size:calc(15px * var(--scale)); line-height:1.55; }
+  .explanation p + p { margin-top:5px; }
+  @media(max-width:650px) { .tools { gap:8px; } }
+}
+</style>
+<div id="question-focus-shared-view" data-view="teaching">
+<header class="top">
+  <div class="toolbar">
+    <div class="brand"><span class="mark" aria-hidden="true">题</span><h1 id="view-title">讲解视图</h1></div>
+    <div class="tools">
+      <div class="capsule" id="page-view" role="group" aria-label="页面视图">
+        <button type="button" data-value="teaching" aria-pressed="true">讲解视图</button>
+        <button type="button" data-value="questions" aria-pressed="false">只看题目</button>
+      </div>
+      <label class="zoom" for="zoom">字号 <input id="zoom" type="range" min="80" max="160" step="5" value="100"><output id="zoom-value" for="zoom">100%</output></label>
+      <div class="control-group"><span id="nav-placement-label">导航位置</span>
+        <div class="capsule" id="nav-placement" role="group" aria-labelledby="nav-placement-label">
+          <button type="button" data-value="top" aria-pressed="false">上方</button>
+          <button type="button" data-value="bottom" aria-pressed="true">下方</button>
+        </div>
+      </div>
+      <button class="btn" type="button" id="fullscreen">全屏</button>
+    </div>
+  </div>
+</header>
+<div class="layout" data-nav="bottom">
+
+  <section class="stage" aria-label="题目内容">
+    <header class="stage-head"><p class="location" id="location">III · 句型转换</p><p class="stage-count" id="count" aria-live="polite">第 1 / 5 题</p></header>
+    <div class="paper"><ol class="word-list" id="word-list"><li><strong>pancake</strong><span>/ˈpænkeɪk/ · n.</span><span>煎饼</span></li><li><strong>ingredient</strong><span>/ɪnˈɡriːdiənt/ · n.</span><span>原料</span></li><li><strong>eggplant</strong><span>/ˈeɡplænt/ · n.</span><span>茄子</span></li><li><strong>flatbread</strong><span>/ˈflætbred/ · n.</span><span>扁面包</span></li><li><strong>hairpin</strong><span>/ˈheəpɪn/ · n.</span><span>发夹</span></li><li><strong>decoration</strong><span>/ˌdekəˈreɪʃən/ · n.</span><span>装饰</span></li><li><strong>vivid</strong><span>/ˈvɪvɪd/ · adj.</span><span>生动的；逼真的</span></li></ol>
+      <div id="sample" class="question-list">
+        <h2 class="instructions" lang="en">III. Complete the following sentences as required.</h2>
+        <article class="prompt" data-number="1"><span class="badge">1</span><div>
+          <p class="question"><span lang="en">He was trying to tell me that he wanted to go outside and explore.</span> <small>（改为直接引语）</small></p>
+          <p class="response" lang="en">He was trying to tell me, “<span class="blank" aria-label="第一空"></span> <span class="blank" aria-label="第二空"></span> to go outside and explore.”</p>
+        </div></article>
+      </div>
+      <p class="empty" id="empty" hidden>此题型暂无预览题目。</p>
+    </div>
+    <footer class="stage-foot">
+      <div class="control-group"><span id="display-mode-label">展示模式</span>
+        <div class="capsule" id="display-mode" role="group" aria-labelledby="display-mode-label">
+          <button type="button" data-value="single" aria-pressed="true">逐题展示</button>
+          <button type="button" data-value="all" aria-pressed="false">全部展示</button>
+        </div>
+      </div>
+      <div class="steps"><button class="btn" id="prev" type="button">← 上一题</button><button class="btn primary" id="next" type="button">下一题 →</button></div>
+    </footer>
+  </section>
+  <aside class="nav" aria-labelledby="nav-heading">
+    <h2 id="nav-heading">题目导航</h2>
+    <div class="nav-body">
+      <div><p class="field-label" id="sections-label">题型</p><div class="choices" id="sections" role="group" aria-labelledby="sections-label">
+        <button type="button" data-section="单词" aria-pressed="true">单词</button><button type="button" data-section="I" aria-pressed="false">I</button><button type="button" data-section="II" aria-pressed="false">II</button><button type="button" data-section="III" aria-pressed="false">III</button>
+      </div></div>
+      <div><p class="field-label" id="numbers-label">题号</p><div class="numbers" id="numbers" role="group" aria-labelledby="numbers-label"></div></div>
+    </div>
+  </aside>
+</div>
+<script>
+(() => {
+  const root = document.getElementById('question-focus-shared-view');
+  const get = id => root.querySelector('#' + id);
+  const layout = root.querySelector('.layout');
+  const nav = root.querySelector('.nav');
+  const stage = root.querySelector('.stage');
+  let section = '单词';
+  let number = 1;
+  let mode = 'single';
+
+  const examples = [
+    ['Anna said that she was ready to leave.', '改为直接引语', 'Anna said, “{blank} {blank} ready to leave.”'],
+    ['“I need more time,” Ben said.', '改为间接引语', 'Ben said that {blank} {blank} more time.'],
+    ['Lily asked, “Where is my notebook?”', '改为间接引语', 'Lily asked where {blank} notebook {blank}.'],
+    ['Tom asked whether I could help him.', '改为直接引语', 'Tom asked me, “{blank} {blank} help me?”']
+  ];
+  for (const [index, [question, instruction, response]] of examples.entries()) {
+    const article = get('sample').querySelector('.prompt').cloneNode(true);
+    article.dataset.number = index + 2;
+    article.querySelector('.badge').textContent = index + 2;
+    article.querySelector('.question span').textContent = question;
+    article.querySelector('.question small').textContent = '（' + instruction + ' · 示例）';
+    const answer = article.querySelector('.response');
+    answer.replaceChildren();
+    const parts = response.split('{blank}');
+    parts.forEach((part, position) => {
+      if (position > 0) {
+        const blank = document.createElement('span');
+        blank.className = 'blank';
+        blank.setAttribute('aria-label', '第 ' + position + ' 空');
+        answer.append(blank);
+      }
+      answer.append(part);
+    });
+    get('sample').append(article);
+  }
+
+  const questions = [...get('sample').querySelectorAll('.prompt')];
+  const explanations = [
+    ['I want', '这里的 he 指说话者本人。还原原话时，用 I 指自己，把 wanted 还原为 want。'],
+    ['I am', 'Anna 用 I 指自己，原话中的 am ready 在间接引语里变成了 was ready。'],
+    ['he needed', 'Ben 的 I 改为 he。转述过去说过的话，这里将 need 改为 needed。'],
+    ['her / was', 'Lily 的 my 改为 her，is 改为 was。间接问句用陈述语序，主语 her notebook 在 was 之前。'],
+    ['Can you', '把 whether 引导的间接问句还原成一般疑问句。Tom 问的是听话人，所以用 you。']
+  ];
+  questions.forEach((question, index) => {
+    const [answer, explanation] = explanations[index];
+    const panel = document.createElement('div');
+    panel.className = 'explanation';
+    const answerLine = document.createElement('p');
+    const label = document.createElement('strong');
+    label.textContent = '答案　';
+    answerLine.append(label, answer);
+    const explanationLine = document.createElement('p');
+    explanationLine.textContent = explanation;
+    panel.append(answerLine, explanationLine);
+    question.querySelector('.response').after(panel);
+  });
+  const sectionButtons = [...get('sections').querySelectorAll('button')];
+  const numbers = questions.map((question, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = index + 1;
+    button.setAttribute('aria-label', '第 ' + (index + 1) + ' 题');
+    button.onclick = () => {
+      number = index + 1;
+      render();
+      if (mode === 'all') question.scrollIntoView({block:'nearest'});
+    };
+    get('numbers').append(button);
+    return button;
+  });
+
+  function render() {
+    const count = section === 'III' ? questions.length : 0;
+    const all = mode === 'all';
+    sectionButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.section === section)));
+    numbers.forEach((button, index) => {
+      button.hidden = !count;
+      button.setAttribute('aria-current', String(Boolean(count) && index + 1 === number));
+    });
+    questions.forEach((question, index) => {
+      question.hidden = !all && index + 1 !== number;
+      question.setAttribute('aria-current', String(all && index + 1 === number));
+    });
+    get('location').textContent = count ? 'III · 句型转换' : section;
+    get('count').textContent = !count ? (section === '单词' ? '共 7 词' : '暂无预览题目') : all ? '共 ' + count + ' 题' : '第 ' + number + ' / ' + count + ' 题';
+    get('sample').hidden = !count;
+    get('empty').hidden = Boolean(count) || section === '单词';
+    get('word-list').hidden = section !== '单词';
+    get('display-mode').parentElement.hidden = !count;
+    get('numbers').parentElement.hidden = !count;
+    get('prev').parentElement.hidden = all || !count;
+    get('prev').disabled = number === 1;
+    get('next').disabled = number === count;
+  }
+
+  function bindCapsule(id, onSelect) {
+    const buttons = [...get(id).querySelectorAll('button')];
+    for (const button of buttons) {
+      button.onclick = () => {
+        buttons.forEach(peer => peer.setAttribute('aria-pressed', String(peer === button)));
+        onSelect(button.dataset.value);
+      };
+    }
+  }
+  bindCapsule('page-view', value => {
+    root.dataset.view = value;
+    const questionsOnly = value === 'questions';
+    get('view-title').textContent = questionsOnly ? '只看题目' : '讲解视图';
+    root.querySelectorAll('.explanation').forEach(panel => { panel.hidden = questionsOnly; });
+    document.getElementById('ssp-preview').classList.toggle('questions-only', questionsOnly);
+  });
+  bindCapsule('nav-placement', value => {
+    layout.dataset.nav = value;
+    if (value === 'top') stage.before(nav);
+    else stage.after(nav);
+  });
+  bindCapsule('display-mode', value => {
+    mode = value;
+    render();
+  });
+  sectionButtons.forEach(button => button.onclick = () => {
+    section = button.dataset.section;
+    number = 1;
+    render();
+  });
+  get('prev').onclick = () => { number -= 1; render(); };
+  get('next').onclick = () => { number += 1; render(); };
+  get('zoom').oninput = event => {
+    const value = event.target.value;
+    root.style.setProperty('--scale', value / 100);
+    get('zoom-value').value = value + '%';
+  };
+  const fullscreen = get('fullscreen');
+  fullscreen.hidden = !document.fullscreenEnabled;
+  fullscreen.onclick = async () => {
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else await root.requestFullscreen();
+    } catch {
+      fullscreen.textContent = '全屏不可用';
+    }
+  };
+  document.addEventListener('fullscreenchange', () => {
+    fullscreen.textContent = document.fullscreenElement === root ? '退出全屏' : '全屏';
+  });
+  render();
+})();
+</script>
+</div>
+</div></main></div>
+<script>
+(() => {
+  const root = document.getElementById('ssp-preview');
+  const palette = root.querySelector('#palette');
+  palette.onchange = () => { palette.closest('.reading-display-pane').dataset.palette = palette.value; };
+  const tools = root.querySelector('#preview-tools');
+  tools.removeAttribute('aria-expanded');
+  tools.onclick = () => {
+    const heading = root.querySelector('#view-title');
+    heading.scrollIntoView({block:'nearest'});
+    root.querySelector('#page-view button[aria-pressed=true]').focus({preventScroll:true});
+  };
+})();
+</script>
+</div>
+
+</body></html>
