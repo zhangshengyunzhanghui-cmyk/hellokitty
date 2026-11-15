@@ -1,0 +1,131 @@
+/* Load after the existing SSP stylesheets. All selectors are scoped to SSP. */
+@media screen {
+  body.ssp-reading-page {
+    --ssp-ink: #202f2b;
+    --ssp-muted: #52625b;
+    --ssp-line: #d7e1d8;
+    --ssp-surface: #fffefb;
+    --ssp-canvas: #f1f4ef;
+    --ssp-green: #28574a;
+    --ssp-tint: #e7f0e9;
+    background: var(--ssp-canvas);
+    color: var(--ssp-ink);
+    font-family: "Inter", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  }
+  body.ssp-reading-page .reader-header {
+    gap: 12px 18px;
+    padding: 10px clamp(14px, 2.4vw, 34px);
+    background: var(--ssp-surface);
+    color: var(--ssp-ink);
+    border-color: var(--ssp-line);
+  }
+  body.ssp-reading-page .reader-header :is(a,button) {
+    background: var(--ssp-surface);
+    color: var(--ssp-green);
+    border-color: var(--ssp-line);
+    min-height: 38px;
+  }
+  body.ssp-reading-page .reader-header nav {
+    background: var(--ssp-tint);
+    padding: 3px;
+    border-radius: 999px;
+  }
+  body.ssp-reading-page .reader-header nav a { border: 0; border-radius: 999px; }
+  body.ssp-reading-page .reader-header nav a[aria-current=page] {
+    background: var(--ssp-green);
+    color: #fff;
+  }
+  body.ssp-reading-page .reader-layout {
+    gap: clamp(12px, 1.5vw, 24px);
+    padding: 18px clamp(12px, 2vw, 32px) 82px;
+  }
+  body.ssp-reading-page .reader-layout > main {
+    width: 100%;
+    max-width: none;
+  }
+  body.ssp-reading-page :is(#readerContents, #readingSplit > .reading-display-pane) {
+    border: 1px solid var(--ssp-line);
+    border-radius: 16px;
+  }
+  body.ssp-reading-page #readerContents { background: var(--ssp-surface); }
+  body.ssp-reading-page #readerContents summary { color: var(--ssp-green); }
+  body.ssp-reading-page #chapterTitle {
+    margin: 0 0 16px;
+    padding: 0;
+    color: var(--ssp-ink);
+    font: 700 clamp(28px,3.1vw,52px)/1.13 Georgia,"Songti SC",serif;
+    text-wrap: pretty;
+  }
+  body.ssp-reading-page #readingSplit > .reading-display-pane {
+    box-sizing: border-box;
+    padding: clamp(12px,1.65vw,28px);
+  }
+  body.ssp-reading-page #readingText { text-align: start; line-height: 1.65; }
+  body.ssp-reading-page #readingText p { margin-block: 0 1em; }
+  body.ssp-reading-page #readingText p:last-child { margin-bottom: 0; }
+  body.ssp-reading-page #question-focus-shared-view {
+    color-scheme: light;
+    --page: var(--ssp-surface);
+    --paper: var(--ssp-surface);
+    --white: var(--ssp-surface);
+    --ink: var(--ssp-ink);
+    --muted: var(--ssp-muted);
+    --line: var(--ssp-line);
+    --accent: var(--ssp-green);
+    --soft: var(--ssp-tint);
+    --desk-bar: var(--ssp-surface);
+    --desk-bar-text: var(--ssp-ink);
+    border: 1px solid var(--ssp-line);
+    border-radius: 16px;
+  }
+  body.ssp-reading-page #question-focus-shared-view .top { border-bottom: 1px solid var(--ssp-line); }
+  body.ssp-reading-page #question-focus-shared-view .toolbar {
+    display: grid;
+    width: auto;
+    min-height: 0;
+    gap: 10px;
+    padding: 14px;
+  }
+  body.ssp-reading-page #question-focus-shared-view .mark { display: none; }
+  body.ssp-reading-page #question-focus-shared-view #view-title {
+    color: var(--ssp-ink);
+    font: 750 19px/1.3 system-ui,sans-serif;
+  }
+  body.ssp-reading-page #question-focus-shared-view .tools { gap: 8px; }
+  body.ssp-reading-page #question-focus-shared-view .tools > * { max-width: 100%; }
+  body.ssp-reading-page #question-focus-shared-view .zoom input { width: clamp(58px,6vw,116px); }
+  body.ssp-reading-page #question-focus-shared-view .capsule { background: var(--ssp-tint); }
+  body.ssp-reading-page #question-focus-shared-view .capsule button[aria-pressed=true] {
+    background: var(--ssp-green);
+    color: #fff;
+  }
+  body.ssp-reading-page #question-focus-shared-view .layout { width: 100%; padding-block: 0; }
+  body.ssp-reading-page #question-focus-shared-view :is(.stage,.nav) {
+    border: 0;
+    border-radius: 0 !important;
+    box-shadow: none;
+  }
+  body.ssp-reading-page #question-focus-shared-view .nav { border-top: 1px solid var(--ssp-line); }
+  body.ssp-reading-page #question-focus-shared-view .layout[data-nav=top] .nav {
+    border-top: 0;
+    border-bottom: 1px solid var(--ssp-line);
+  }
+  body.ssp-reading-page #question-focus-shared-view .paper { min-height: 0; }
+  body.ssp-reading-page #question-focus-shared-view .stage-foot:has(.control-group[hidden]):has(.steps[hidden]) { display: none; }
+  body.ssp-reading-page #sspQuestionsScreen[open] { background: var(--ssp-canvas); }
+  /* Override the saved drag position only on this teaching page. */
+  body.ssp-reading-page #petalNavigation,
+  body.ssp-reading-page #petalNavigation.petal-free {
+    inset: auto 12px 12px auto !important;
+    transform: none !important;
+    margin: 0;
+  }
+  body.ssp-reading-page :is(button,a,input,select):focus-visible {
+    outline: 2px solid #226c57;
+    outline-offset: 3px;
+  }
+  @media (max-width:760px) {
+    body.ssp-reading-page .reader-layout { padding-inline: 12px; }
+    body.ssp-reading-page #readingSplit > .reading-display-pane { position: static; }
+  }
+}
