@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>语法章节目录</title></head><body>
+<style>
+#grammar-directory-demo{--paper:light-dark(#fffefa,#17241f);--bg:light-dark(#edf3ee,#11201a);--ink:light-dark(#20362c,#e8f2ec);--muted:light-dark(#50695d,#adc2b7);--line:light-dark(#d6e3d9,#385346);--active:light-dark(#e2efe5,#29483b);color-scheme:light dark;color:var(--ink);font-family:Inter,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:var(--bg);padding:20px;display:grid;place-items:center;border-radius:18px}
+#grammar-directory-demo *{box-sizing:border-box}
+#grammar-directory-demo [hidden]{display:none!important}
+#grammar-directory-demo aside{width:min(100%,340px);background:var(--paper);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 14px 35px #20362c16}
+#grammar-directory-demo header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 16px;border-bottom:1px solid var(--line)}
+#grammar-directory-demo h2{margin:0;font-size:19px;font-weight:700}
+#grammar-directory-demo button{font:inherit;color:inherit;cursor:pointer}
+#grammar-directory-demo .fold{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:0 12px;min-height:38px;font-size:13px;font-weight:650;white-space:nowrap}
+#grammar-directory-demo button:focus-visible{outline:2px solid light-dark(#28654f,#a0ddc0);outline-offset:2px}
+#grammar-directory-demo nav{max-height:488px;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:8px 12px 14px}
+#grammar-directory-demo h3{font-size:12px;font-weight:700;color:var(--muted);margin:0;padding:11px 8px 5px;background:var(--paper);position:sticky;top:-8px;z-index:1}
+#grammar-directory-demo .chapter{display:grid;grid-template-columns:32px 1fr auto;gap:10px;align-items:center;width:100%;min-height:44px;text-align:left;border:1px solid transparent;background:transparent;border-radius:11px;padding:5px 9px;margin:2px 0}
+#grammar-directory-demo .chapter:hover{background:var(--bg)}
+#grammar-directory-demo .chapter[aria-current=true]{background:var(--active);border-color:var(--line);font-weight:700}
+#grammar-directory-demo .number{height:28px;border-radius:7px;display:grid;place-items:center;background:var(--bg);color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+#grammar-directory-demo .chapter[aria-current=true] .number{background:light-dark(#28604b,#b5e5cc);color:light-dark(#fff,#113326)}
+#grammar-directory-demo .status{font-size:11px;font-weight:650;color:var(--muted)}
+#grammar-directory-demo footer{border-top:1px solid var(--line);padding:11px 16px;font-size:13px;color:var(--muted)}
+#grammar-directory-demo[data-collapsed=true] aside{width:min(100%,220px)}
+#grammar-directory-demo[data-collapsed=true] header{border:0}
+#grammar-directory-demo[data-collapsed=true] h2{font-size:15px}
+</style>
+<div id="grammar-directory-demo">
+  <aside aria-labelledby="grammar-directory-heading">
+    <header>
+      <h2 id="grammar-directory-heading">章节目录</h2>
+      <button class="fold" type="button" aria-expanded="true" aria-controls="grammar-directory-list">‹ 收起</button>
+    </header>
+    <nav id="grammar-directory-list" aria-label="语法章节"></nav>
+    <footer aria-live="polite">当前章节 · 一般现在时</footer>
+  </aside>
+</div>
+<script>
+(() => {
+  const root = document.getElementById('grammar-directory-demo');
+  const list = root.querySelector('nav');
+  const footer = root.querySelector('footer');
+  const fold = root.querySelector('.fold');
+  const groups = [
+    ['时态', ['一般现在时','一般过去时','现在进行时','过去进行时','一般将来时','现在完成时','过去完成时']],
+    ['句型', ['特殊疑问句','祈使句','感叹句','反意疑问句']],
+    ['从句', ['定语从句','宾语从句','状语从句']],
+    ['句子成分与词类', ['句子成分','名词','冠词']]
+  ];
+  let number = 0;
+  let current;
+  for (const [heading, chapters] of groups) {
+    const group = document.createElement('section');
+    const title = document.createElement('h3');
+    title.textContent = heading;
+    group.append(title);
+    for (const chapter of chapters) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'chapter';
+      const index = document.createElement('span');
+      index.className = 'number';
+      index.textContent = String(++number).padStart(2,'0');
+      const name = document.createElement('span');
+      name.textContent = chapter;
+      const status = document.createElement('span');
+      status.className = 'status';
+      status.textContent = '当前';
+      status.hidden = number !== 1;
+      button.setAttribute('aria-current', String(number === 1));
+      if (number === 1) current = button;
+      button.append(index, name, status);
+      button.onclick = () => {
+        current.setAttribute('aria-current','false');
+        current.querySelector('.status').hidden = true;
+        current = button;
+        button.setAttribute('aria-current','true');
+        status.hidden = false;
+        footer.textContent = '当前章节 · ' + chapter;
+      };
+      group.append(button);
+    }
+    list.append(group);
+  }
+  fold.onclick = () => {
+    const collapsed = !list.hidden;
+    list.hidden = footer.hidden = collapsed;
+    root.dataset.collapsed = String(collapsed);
+    fold.setAttribute('aria-expanded', String(!collapsed));
+    fold.textContent = collapsed ? '› 展开' : '‹ 收起';
+  };
+})();
+</script>
+
+</body></html>
