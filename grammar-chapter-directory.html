@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>语法章节目录</title></head><body>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>语法章节目录</title><style>body{margin:0}</style></head><body>
 <style>
 #grammar-directory-demo{--paper:light-dark(#fffefa,#17241f);--bg:light-dark(#edf3ee,#11201a);--ink:light-dark(#20362c,#e8f2ec);--muted:light-dark(#50695d,#adc2b7);--line:light-dark(#d6e3d9,#385346);--active:light-dark(#e2efe5,#29483b);color-scheme:light dark;color:var(--ink);font-family:Inter,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:var(--bg);padding:20px;display:grid;place-items:center;border-radius:18px}
 #grammar-directory-demo *{box-sizing:border-box}
@@ -19,15 +19,18 @@
 #grammar-directory-demo .chapter[aria-current=true] .number{background:light-dark(#28604b,#b5e5cc);color:light-dark(#fff,#113326)}
 #grammar-directory-demo .status{font-size:11px;font-weight:650;color:var(--muted)}
 #grammar-directory-demo footer{border-top:1px solid var(--line);padding:11px 16px;font-size:13px;color:var(--muted)}
-#grammar-directory-demo[data-collapsed=true] aside{width:min(100%,220px)}
-#grammar-directory-demo[data-collapsed=true] header{border:0}
-#grammar-directory-demo[data-collapsed=true] h2{font-size:15px}
+#grammar-directory-demo[data-collapsed=true]{justify-items:start;padding-inline-start:0;border-start-start-radius:0;border-end-start-radius:0}
+#grammar-directory-demo[data-collapsed=true] aside{width:max-content;border:0;border-radius:0;overflow:visible;background:transparent;box-shadow:none}
+#grammar-directory-demo[data-collapsed=true] header{border:0;padding:0}
+#grammar-directory-demo[data-collapsed=true] .fold{width:42px;min-height:106px;display:grid;align-content:center;justify-items:center;gap:4px;padding:8px 0;border-inline-start:0;border-radius:0 12px 12px 0;background:var(--paper);color:var(--ink);box-shadow:2px 4px 12px #20362c16}
+#grammar-directory-demo .fold-edge{writing-mode:vertical-rl;letter-spacing:.14em}
+#grammar-directory-demo .fold-arrow{font-size:22px;line-height:1}
 </style>
 <div id="grammar-directory-demo">
   <aside aria-labelledby="grammar-directory-heading">
     <header>
       <h2 id="grammar-directory-heading">章节目录</h2>
-      <button class="fold" type="button" aria-expanded="true" aria-controls="grammar-directory-list">‹ 收起</button>
+      <button class="fold" type="button" aria-expanded="true" aria-controls="grammar-directory-list"><span class="fold-full">‹ 收起</span><span class="fold-arrow" aria-hidden="true" hidden>›</span><span class="fold-edge" hidden>目录</span></button>
     </header>
     <nav id="grammar-directory-list" aria-label="语法章节"></nav>
     <footer aria-live="polite">当前章节 · 一般现在时</footer>
@@ -85,7 +88,11 @@
     list.hidden = footer.hidden = collapsed;
     root.dataset.collapsed = String(collapsed);
     fold.setAttribute('aria-expanded', String(!collapsed));
-    fold.textContent = collapsed ? '› 展开' : '‹ 收起';
+    root.querySelector('h2').hidden = collapsed;
+    fold.querySelector('.fold-full').hidden = collapsed;
+    fold.querySelector('.fold-arrow').hidden = !collapsed;
+    fold.querySelector('.fold-edge').hidden = !collapsed;
+    fold.setAttribute('aria-label', collapsed ? '展开章节目录' : '收起章节目录');
   };
 })();
 </script>
