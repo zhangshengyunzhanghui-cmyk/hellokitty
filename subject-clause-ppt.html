@@ -263,6 +263,28 @@ body{background:#eef1f9;margin:0;padding:20px}
 #clause-ui .position-examples h5{font-size:16px;margin:0;color:var(--active)}
 #clause-ui .position-examples p{font-size:var(--type);margin:5px 0;overflow-wrap:break-word}
 #clause-ui .position-examples mark{background:var(--sage);color:var(--active);font-weight:700}
+</style><style>
+#clause-ui:not([data-present=true]) .lesson{max-width:210mm;margin:auto;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:clamp(16px,3vw,35px)}
+#clause-ui:not([data-present=true]) .lesson .topic{padding:12px 0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:var(--paper)}
+#clause-ui:not([data-present=true]) .visual-lesson{display:block}
+#clause-ui:not([data-present=true]) .visual-lesson img{width:min(100%,310px);margin:0 0 12px}
+#clause-ui:not([data-present=true]) .visual-copy .teaching-rows{grid-template-columns:minmax(0,1fr)}
+#clause-ui:not([data-present=true]) .visual-point{background:transparent;border-left:3px solid var(--line);border-radius:0;padding:3px 0 3px 10px}
+#clause-ui:not([data-present=true]) .visual-point dl{display:block}
+#clause-ui:not([data-present=true]) .position-examples section{background:var(--sage)}
+@page{size:A4 portrait;margin:14mm}
+@media print{
+ body{margin:0!important;padding:0!important;background:white!important}
+ #clause-ui{min-width:0;max-width:none;border:0;box-shadow:none;overflow:visible}
+ #clause-ui :is(header,.tools,.slide-sidebar,.presentation-dock,.practice){display:none!important}
+ #clause-ui .deck{display:block;aspect-ratio:auto!important;height:auto!important;min-height:0!important;overflow:visible!important;background:white;padding:0!important}
+ #clause-ui .lesson,#clause-ui .lesson .topic[hidden]{display:block!important}
+ #clause-ui .lesson{padding:0!important;border:0!important;max-width:none!important}
+ #clause-ui .lesson>div,#clause-ui .visual-lesson,#clause-ui .visual-copy .teaching-rows{display:block!important}
+ #clause-ui .visual-lesson img{width:55mm;height:auto;margin-bottom:3mm}
+ #clause-ui .visual-point{break-inside:avoid;margin-bottom:2mm}
+ #clause-ui h3,#clause-ui h4{break-after:avoid}
+}
 </style><div id="clause-ui">
 <header><h2>主语从句 · 教学放映台</h2></header>
 <div class="tools" aria-label="投屏工具">
