@@ -24,7 +24,29 @@
 #clause-ui[data-menu=closed] .fold-menu{writing-mode:vertical-rl;border-radius:0 10px 10px 0}
 #clause-ui[data-present=true] .deck{grid-template-columns:minmax(0,1fr)}
 #clause-ui[data-present=true] .slide-sidebar{display:none}
-@media(max-width:620px){#clause-ui .deck{grid-template-columns:minmax(0,1fr)}#clause-ui .slide-sidebar{position:static}#clause-ui .slide-sidebar .question-map{grid-template-columns:repeat(auto-fit,minmax(36px,1fr))}}
+
+/* Desktop classroom deck */
+#clause-ui{min-width:760px;max-width:1500px;border-radius:20px;--active:#163f94;--on:#fff;--paper:#fff;--sage:#eaf0ff;--line:#d8e2f4;--ink:#152b4b}
+#clause-ui header{background:radial-gradient(ellipse at 85% -70%,#a67efa 0,transparent 62%),linear-gradient(112deg,#102657,#244ab1 68%,#5941ac);padding:24px 28px;border-bottom:4px solid #f7c86b}
+#clause-ui header h2{font-size:34px;letter-spacing:.015em}
+#clause-ui header button[aria-pressed=true]{background:#f6cf80;color:#253459}
+#clause-ui .tools{gap:12px}
+#clause-ui .tools .present{background:var(--active);color:var(--on);margin-left:auto}
+#clause-ui .deck{grid-template-columns:220px minmax(0,1fr);gap:20px;background:linear-gradient(140deg,var(--sage),var(--paper) 80%);aspect-ratio:auto;min-height:520px;padding:20px}
+#clause-ui .slide-sidebar{border-radius:14px;padding:12px;box-shadow:0 10px 25px #192c5710}
+#clause-ui .sidebar-head{margin-bottom:12px}
+#clause-ui .slide-sidebar .question-map button{border-radius:7px;min-height:40px}
+#clause-ui .problem{position:relative;overflow:hidden;background:radial-gradient(ellipse at 110% -20%,var(--sage),transparent 56%),var(--paper);border-radius:18px;border-top:5px solid var(--active);min-height:290px;padding:28px 35px}
+#clause-ui .slide-caption{display:inline-block;background:var(--active);color:var(--on);padding:5px 12px;border-radius:4px;margin-bottom:22px}
+#clause-ui .topic{padding:26px}
+#clause-ui .topic h3{font-size:25px;border-left:5px solid var(--active);padding-left:12px}
+#clause-ui .numbering{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:8px;margin:0 0 12px}
+#clause-ui .reveal-actions button:first-child{background:var(--active);color:var(--on)}
+#clause-ui [data-analysis]{border-left:4px solid var(--active)}
+#clause-ui[data-present=true] .deck{min-height:0;aspect-ratio:16/9}
+#clause-ui[data-present=true] .problem{min-height:0}
+#clause-ui:fullscreen{min-width:0}
+#clause-ui:fullscreen .deck{min-height:0;aspect-ratio:auto}
 </style></head><body><style>
 #clause-ui{color-scheme:light dark;--paper:light-dark(#fffdf9,#202923);--ink:light-dark(#223429,#ecf4ee);--sage:light-dark(#e8f0e6,#2c3e32);--line:light-dark(#d5e1d6,#45574a);--active:light-dark(#285340,#bce9cc);--on:light-dark(white,#182f24);color:var(--ink);background:var(--paper);font:15px/1.65 Inter,"PingFang SC",system-ui;border:1px solid var(--line);border-radius:20px;overflow:hidden}
 #clause-ui *{box-sizing:border-box}
@@ -45,7 +67,6 @@
 #clause-ui .note,#clause-ui details{padding:12px;border-radius:10px}
 #clause-ui .problem>p{white-space:pre-line;font-size:18px}
 #clause-ui .numbering{align-items:center;justify-content:space-between;margin:8px 0}
-@media(max-width:560px){#clause-ui .lesson{grid-template-columns:1fr}#clause-ui nav{display:flex;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--line)}#clause-ui nav button{font-size:12px}}
 
 #clause-ui{--type:18px}
 #clause-ui[data-theme=mist]{--paper:#f8fbff;--ink:#172f49;--sage:#e7effa;--line:#cbd9e9;--active:#244c76;--on:white}
@@ -64,7 +85,6 @@
 #clause-ui .numbering output{font-size:14px}
 #clause-ui .tools button:disabled{opacity:.5}
 #clause-ui .problem>p{overflow-wrap:anywhere}
-@media(max-width:420px){#clause-ui .problem{padding:12px}#clause-ui .tools{padding:8px}}
 
 #clause-ui{--type:20px;--paper:#fffdf8;--ink:#20352e;--sage:#eaf2ea;--line:#dae6dd;--active:#205640;--on:white;max-width:1100px;margin:0 auto;position:relative;border-radius:24px}
 #clause-ui header{background:#153e32;color:#fff;padding:26px 32px;display:flex;align-items:end;justify-content:space-between;gap:14px;flex-wrap:wrap}
@@ -82,7 +102,6 @@
 #clause-ui .lesson{background:var(--paper);border:1px solid var(--line);border-radius:16px}
 #clause-ui:fullscreen{width:100%;height:100%;max-width:none;display:flex;flex-direction:column}
 #clause-ui:fullscreen .deck{flex:1;aspect-ratio:auto}
-@media(max-width:620px){#clause-ui header{padding:16px}#clause-ui .deck{aspect-ratio:auto;min-height:320px}#clause-ui .tools{padding-inline:10px}}
 </style>
 <div id="clause-ui">
 <header><h2>主语从句课堂</h2><div aria-label="教学内容"><button type="button" data-view="lesson" aria-pressed="false">考点速查</button><button type="button" data-view="mirror" aria-pressed="false">主语从句与宾语从句</button><button type="button" data-view="practice" aria-pressed="true">例题闯关</button></div></header>
