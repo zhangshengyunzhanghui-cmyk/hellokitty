@@ -235,6 +235,27 @@ body{background:#eef1f9;margin:0;padding:20px}
 #clause-ui .visual-point dt{font-size:12px;font-weight:700;color:var(--active)}
 #clause-ui .visual-point dd{font-size:max(14px,calc(var(--type) - 4px));margin:0;overflow-wrap:anywhere}
 #clause-ui[data-present=true] .visual-point dd{font-size:var(--type)}
+</style><style>
+/* Wide reading layout, with every teaching point visible. */
+#clause-ui{max-width:1560px}
+#clause-ui .deck{grid-template-columns:206px minmax(0,1fr);gap:15px}
+#clause-ui .lesson .topic{padding:16px 18px}
+#clause-ui .lesson .topic h3{margin-bottom:10px}
+#clause-ui .visual-lesson{grid-template-columns:clamp(142px,18%,220px) minmax(0,1fr);gap:14px}
+#clause-ui .visual-copy{container-type:inline-size}
+#clause-ui .visual-copy .teaching-rows{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:8px}
+#clause-ui .visual-point{padding:9px 11px}
+#clause-ui .visual-point h4{margin:0 0 4px}
+#clause-ui .visual-point dl{display:flex;flex-wrap:wrap;gap:5px 14px;align-items:baseline}
+#clause-ui .visual-point dl>div{flex:1 1 130px;min-width:0}
+#clause-ui .visual-point dl>div+div{margin-top:0}
+#clause-ui .visual-point dt,#clause-ui .visual-point dd{display:inline}
+#clause-ui .visual-point dt{margin-inline-end:6px}
+#clause-ui .visual-point dd{line-height:1.45;overflow-wrap:break-word}
+#clause-ui .visual-copy .note{margin:8px 0 0;padding:7px 10px}
+@container (min-width:700px){#clause-ui .visual-copy .teaching-rows{grid-template-columns:repeat(3,minmax(0,1fr))}}
+#clause-ui[data-menu=closed] .deck{grid-template-columns:44px minmax(0,1fr)}
+#clause-ui[data-present=true] .deck{grid-template-columns:minmax(0,1fr)}
 </style><div id="clause-ui">
 <header><h2>主语从句 · 教学放映台</h2></header>
 <div class="tools" aria-label="投屏工具">
