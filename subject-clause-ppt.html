@@ -151,9 +151,12 @@ body{background:#eef1f9;margin:0;padding:20px}
 #clause-ui .slide-sidebar nav button[aria-pressed=true]{background:var(--sage);color:var(--ink);border-inline-start:3px solid var(--active)}
 #clause-ui .practice-entry button:not([aria-pressed=true]){background:transparent;color:var(--ink)}
 #clause-ui .lesson{border:0;background:transparent}
-#clause-ui .lesson>div{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:14px;align-items:start}
+#clause-ui .lesson>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch}
 #clause-ui .lesson .topic{min-width:0;padding:17px;background:var(--paper);border:1px solid var(--line);border-radius:15px}
-#clause-ui .lesson .topic[data-current=true]{border-color:var(--active)}
+#clause-ui .lesson .topic{border-top:3px solid var(--active)}
+#clause-ui .lesson .topic .tablewrap{max-width:100%;overflow-x:auto}
+#clause-ui .lesson .topic table{table-layout:fixed}
+#clause-ui .lesson .topic:target{outline:2px solid var(--active);outline-offset:2px}
 #clause-ui .lesson .topic h3{font-size:20px}
 #clause-ui .lesson :is(td,th){font-size:max(14px,calc(var(--type) - 4px));overflow-wrap:anywhere}
 #clause-ui[data-menu=closed] .deck{grid-template-columns:44px minmax(0,1fr)}
@@ -204,7 +207,7 @@ body{background:#eef1f9;margin:0;padding:20px}
   press(topics,topics[index]);
   const presenting=root.dataset.present==='true';
   const panels=all('.topic');
-  panels.forEach((panel,i)=>{panel.hidden=presenting&&i!==index;panel.dataset.current=String(i===index);});
+  panels.forEach((panel,i)=>{panel.hidden=presenting&&i!==index;});
   if(!presenting&&!pick('.lesson').hidden)panels[index]?.scrollIntoView({block:'nearest',inline:'nearest'});
  }
  views.forEach(button=>button.onclick=()=>{
@@ -216,7 +219,7 @@ body{background:#eef1f9;margin:0;padding:20px}
   questionMap.hidden=!practice;
   pick('.completion').hidden=!practice;
   if(button.dataset.view==='mirror')showTopic(5);
-  if(button.dataset.view==='lesson')showTopic(0);
+  if(button.dataset.view==='lesson'){showTopic(0);pick('.deck').scrollTop=0;}
   syncDock();
  });
  topics.forEach((button,index)=>button.onclick=()=>{press(views,views[0]);showTopic(index);});
